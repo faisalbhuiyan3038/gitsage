@@ -1,9 +1,9 @@
 import { db } from "@/server/db";
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import React from "react";
 
-const SuncUser = async () => {
+const SyncUser = async () => {
   const { userId } = await auth()
   if (!userId) {
     throw new Error("User not found")
@@ -33,3 +33,5 @@ const SuncUser = async () => {
   })
   return redirect('/dashboard')
 }
+
+export default SyncUser;
