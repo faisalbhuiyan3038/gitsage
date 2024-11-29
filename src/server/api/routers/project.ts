@@ -1,7 +1,8 @@
 import { z } from 'zod';
 import { createTRPCRouter, protectedProcedure } from './../trpc';
 import { PrismaClient } from '@prisma/client';
-import {create} from "domain"
+import { create } from "domain"
+import { get } from 'http';
 export const projectRouter = createTRPCRouter({
     createProject: protectedProcedure.input(
         z.object({
@@ -9,7 +10,7 @@ export const projectRouter = createTRPCRouter({
             githubUrl: z.string(),
             githubToken: z.string().optional(),
         })
-    ).mutation(async({ctx, input}) => {
+    ).mutation(async ({ ctx, input }) => {
         const project = await ctx.db.project.create({
             data: {
                 name: input.name,
@@ -22,5 +23,18 @@ export const projectRouter = createTRPCRouter({
             }
         })
         return project
-})
+    }),
+    getProjects: protectedProcedure.query(async ({ ctx }) => {
+       return await ctx.db.project.findMany({
+            where: {
+                userToProjects: {
+                    some: {
+                        userId: ctx.user.userId!
+                    }
+                },
+                deletedAt: null
+            }
+        })
+    })
+
 });
