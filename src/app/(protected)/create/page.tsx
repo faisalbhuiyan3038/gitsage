@@ -20,8 +20,8 @@ export const CreatePage = () => {
 
   function onSubmit(data: FormInput) {
     createProject.mutate({
-      name: data.projectName,
       githubUrl: data.repoUrl,
+      name: data.projectName,
       githubToken: data.githubToken
     }, {
       onSuccess: () => {
