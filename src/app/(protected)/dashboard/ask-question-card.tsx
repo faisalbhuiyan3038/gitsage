@@ -14,8 +14,6 @@ import CodeReferences from './code-references'
 import { api } from '@/trpc/react'
 import { toast } from 'sonner'
 
-const saveAnswer = api.project.saveAnswer.useMutation()
-
 const AskQuestionCard = () => {
     const {project} = useProject()
     const [open, setOpen] = React.useState(false)
@@ -23,6 +21,7 @@ const AskQuestionCard = () => {
     const [loading, setLoading] = React.useState(false)
     const [fileReferences, setFileReferences] = React.useState<{fileName: string; sourceCode: string; summary: string}[]>([])
     const [answer, setAnswer] = React.useState('')
+    const saveAnswer = api.project.saveAnswer.useMutation()
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         setAnswer('')
